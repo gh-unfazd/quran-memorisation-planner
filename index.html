@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QMP by Abdullah</title>
+    <title>QMT</title>
     <style>
         /* Reset and Basic Styling */
         @font-face {
             font-family: 'sf-mono';
-            src: url('sfpro.OTF') format('opentype');
+            src: url('sfpro') format('opentype');
         }
         * {
             margin: 0;
@@ -24,6 +24,7 @@
             justify-content: center;
             min-height: 100vh;
             padding: 20px;
+            flex-direction: column;
         }
 
         .container {
@@ -78,6 +79,13 @@
             color: white;
         }
 
+        /* Footer styling */
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            color: white;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             body {
@@ -123,7 +131,7 @@
             <label for="endDate">target completion date</label>
             <input type="date" id="endDate" required>
 
-            <label for="quranType">mushaf type<</label>
+            <label for="quranType">mushaf type</label>
             <select id="quranType" required>
                 <option value="" disabled selected>select quran type</option>
                 <option value="13">13 line</option>
@@ -134,6 +142,10 @@
         </form>
         <div id="result" class="result"></div>
     </div>
+
+    <footer>
+        <p>&copy; <span id="currentYear"></span> QMP by Abdullah</p>
+    </footer>
 
     <script>
         // Set minimum date for the date input
@@ -179,6 +191,9 @@
                 (${quranType}-line Quran with ${pagesLeft} pages left to complete).
             `;
         }
+
+        // Set the current year dynamically
+        document.getElementById("currentYear").textContent = new Date().getFullYear();
     </script>
 </body>
 </html>
