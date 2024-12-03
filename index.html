@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quran Memorization Planner</title>
+    <style>
+        /* Reset and Basic Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #111;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: #222;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #333;
+            color: white;
+        }
+
+        button {
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #333;
+        }
+
+        .result {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            input, select, button {
+                font-size: 0.9rem;
+            }
+
+            .result {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.3rem;
+            }
+
+            input, select, button {
+                font-size: 0.85rem;
+                padding: 8px;
+            }
+
+            .result {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quran Memorization Planner</h1>
+        <form id="plannerForm">
+            <label for="pagesDone">Pages Already Memorized:</label>
+            <input type="number" id="pagesDone" min="0" max="604" placeholder="Enter pages memorized" required>
+
+            <label for="endDate">Target Completion Date:</label>
+            <input type="date" id="endDate" required>
+
+            <label for="quranType">Quran Type:</label>
+            <select id="quranType" required>
+                <option value="" disabled selected>Select Quran Type</option>
+                <option value="13">13-Line Quran</option>
+                <option value="15">15-Line Quran</option>
+            </select>
+
+            <button type="button" onclick="calculate()">Calculate</button>
+        </form>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        // Set minimum date for the date input
+        document.getElementById("endDate").setAttribute("min", new Date().toISOString().split("T")[0]);
+
+        function calculate() {
+            const pagesDone = document.getElementById("pagesDone").value;
+            const endDate = document.getElementById("endDate").value;
+            const quranType = document.getElementById("quranType").value;
+            const today = new Date();
+
+            // Show error dialog if any input is missing
+            if (!pagesDone || !endDate || !quranType) {
+                alert("Please fill in all fields before calculating.");
+                return;
+            }
+
+            const pagesDoneNum = parseInt(pagesDone, 10);
+            const endDateObj = new Date(endDate);
+            const totalPages = 604;
+
+            // Ensure selected date is valid
+            if (endDateObj <= today) {
+                alert("Please select a future date.");
+                return;
+            }
+
+            if (pagesDoneNum >= totalPages) {
+                document.getElementById("result").textContent = "Congratulations! You've already completed the Quran.";
+                return;
+            }
+
+            const pagesLeft = totalPages - pagesDoneNum;
+            const daysRemaining = Math.ceil((endDateObj - today) / (1000 * 60 * 60 * 24));
+            const pagesPerDay = pagesLeft / daysRemaining;
+
+            const wholePages = Math.floor(pagesPerDay);
+            const remainingLines = Math.round((pagesPerDay - wholePages) * quranType);
+
+            document.getElementById("result").innerHTML = `
+                To finish the Quran by ${endDateObj.toDateString()}, you need to memorize approximately:<br>
+                <strong>${wholePages} pages and ${remainingLines} lines</strong> per day.<br>
+                (${quranType}-line Quran with ${pagesLeft} pages left to complete).
+            `;
+        }
+    </script>
+</body>
+</html>
